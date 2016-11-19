@@ -15,8 +15,9 @@ function showMessage(message) {
 }
 
 $( document ).ready(function() {
-	
 	connect();
+    $("#response").html("");
+    $("#graph").html("");
 });
 
 
@@ -35,9 +36,14 @@ function connect() {
         	// graph value
             temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
             humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
-        	console.log(humidity_value);
-        	console.log(temperature_value);
-
+            showMessage(new Date());
+        	//showMessage("수신 content-type : " + message.headers["content-type"]);
+        	var ct = JSON.parse(message.body).headers["content-type"];
+        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
+        	showMessage("수신 본문의 content-type : " + ct);
+        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
+        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
+        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
         	
            
         });
