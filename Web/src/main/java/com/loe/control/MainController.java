@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class MainController { 
-	private String url ="";
-    private String device_id="";
-	private String dKey="";
+	private String url ="https://apim.startiot.or.kr:8244/charlot/base";
+    private String device_id="55555.5555.RP09";
+	private String dKey="20a663218dd60ad855e2223580755dbe";
 	@Autowired
 	private SimpMessagingTemplate template;
 
@@ -42,7 +42,7 @@ public class MainController {
 		System.out.println("name " + name);
 		if(name.equals("content")){
 			JSONParser jsonParser = new JSONParser();
-			JSONObject result = (JSONObject) jsonParser.parse(body);
+			JSONObject result =(JSONObject) jsonParser.parse(body);
 			JSONObject cin = (JSONObject) result.get("cin");
 		    return (String)cin.get("con");	
 		}
