@@ -14,6 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,9 +33,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class MainController { 
-	private String url ="https://apim.startiot.or.kr:8244/charlot/base";
-    private String device_id="55555.5555.RP09";
-	private String dKey="20a663218dd60ad855e2223580755dbe";
+	@Value("${ldcc.startiot.url}")
+	private String url;
+	@Value("${ldcc.startiot.deviceid}")
+    private String device_id;
+	@Value("${ldcc.startiot.dkey}")
+	private String dKey;
 	@Autowired
 	private SimpMessagingTemplate template;
 
