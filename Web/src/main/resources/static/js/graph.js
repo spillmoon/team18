@@ -24,7 +24,7 @@ $( document ).ready(function() {
 
 function connect() {
     
-	var socket = new SockJS('/timeline');
+	var socket = new SockJS('/dashboard');
 	   
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame) {
@@ -34,8 +34,9 @@ function connect() {
         	
 //        
         	// graph value
-            temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
-            humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
+           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
+            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
+        	temperature_value = JSON.parse(JSON.parse(message.body).body);
             showMessage(new Date());
         	//showMessage("수신 content-type : " + message.headers["content-type"]);
         	var ct = JSON.parse(message.body).headers["content-type"];
@@ -56,26 +57,7 @@ function connect() {
     
     
     
-    var window_socket = new SockJS('/realwindow');
-    stompClient2 = Stomp.over(window_socket);
-    stompClient2.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        stompClient2.subscribe('/topic/subscribe2', function(message){
-        	if(JSON.parse(message.body).body == "MQ=="){
-        		door_value = 1;
-        	}
-        	
-        	else if(JSON.parse(message.body).body == "MA=="){
-            	door_value = 0;
-        	}
     
-//        	
-           
-        });
-    }, function(error) {
-    	console.log(error);
-    	disconnect();
-    });
 }
 
 
@@ -83,9 +65,9 @@ function connect() {
 function graphStart(){
 	var n = 60,		// x 축 범위를 위한 변수 
 	random = d3.random.normal(0, 0), 
-	humidity_data = d3.range(n).map(random),		// 0~0 으로 x축(60) 범위를 초기화 한다.
+	//humidity_data = d3.range(n).map(random),		// 0~0 으로 x축(60) 범위를 초기화 한다.
 	temperature_data = d3.range(n).map(random);
-	door_data = d3.range(n).map(random);
+	//door_data = d3.range(n).map(random);
 	var margin = {top: 20, right: 20, bottom: 20, left: 40},	// 그래프 상하좌우 공백
 	width = 500 - margin.left - margin.right,	// 그래프 x 크기
 	height = 280 - margin.top - margin.bottom;	// 그래프 y 크기 
@@ -119,16 +101,16 @@ function graphStart(){
 	svg.append("g")		// y 축에 대한 그룹 엘리먼트 설정 
 		.attr("class", "y axis")
 		.call(d3.svg.axis().scale(y).orient("left"));
-	var humidity_path = svg.append("g") 
-		.attr("clip-path", "url(#clip)")
-		.append("path")    // 실제 데이터가 그려질 패스에 대한 설정 
-		.datum(humidity_data)
-		.attr("class", "line")
-		.attr("d", line);
-	humidity_path	// 실제 데이터가 그려질 패스에 대한 스타일 설정 
-		.style("stroke-width", 2)
-		.style("stroke", "#0000ff")
-		.style("fill", "none");	
+//	var humidity_path = svg.append("g") 
+//		.attr("clip-path", "url(#clip)")
+//		.append("path")    // 실제 데이터가 그려질 패스에 대한 설정 
+//		.datum(humidity_data)
+//		.attr("class", "line")
+//		.attr("d", line);
+//	humidity_path	// 실제 데이터가 그려질 패스에 대한 스타일 설정 
+//		.style("stroke-width", 2)
+//		.style("stroke", "#0000ff")
+//		.style("fill", "none");	
 	var temperature_path = svg.append("g") 
 	.attr("clip-path", "url(#clip)")
 	.append("path")    // 실제 데이터가 그려질 패스에 대한 설정 
@@ -139,32 +121,32 @@ function graphStart(){
 		.style("stroke-width", 2)
 		.style("stroke", "#ff0000")
 		.style("fill", "none");	
-	var door_path = svg.append("g") 
-	.attr("clip-path", "url(#clip)")
-	.append("path")    // 실제 데이터가 그려질 패스에 대한 설정 
-	.datum(door_data)
-	.attr("class", "line")
-	.attr("d", line);
-	door_path	// 실제 데이터가 그려질 패스에 대한 스타일 설정 
-		.style("stroke-width", 2)
-		.style("stroke", "#50d598")
-		.style("fill", "none");	
+//	var door_path = svg.append("g") 
+//	.attr("clip-path", "url(#clip)")
+//	.append("path")    // 실제 데이터가 그려질 패스에 대한 설정 
+//	.datum(door_data)
+//	.attr("class", "line")
+//	.attr("d", line);
+//	door_path	// 실제 데이터가 그려질 패스에 대한 스타일 설정 
+//		.style("stroke-width", 2)
+//		.style("stroke", "#50d598")
+//		.style("fill", "none");	
 	tick();  
 
 	function tick() {
 		// 새로운 데이터를 뒤에 추가한다.
-		humidity_data.push(humidity_value);
+		//humidity_data.push(humidity_value);
 		temperature_data.push(temperature_value);
-		door_data.push(door_value)
+		//door_data.push(door_value)
 		// 라인을 PATH 방식으로 그리자!!!   
-		humidity_path
-			.attr("d", line)
-			.attr("transform", null)	// 기존 변환 행렬을 초기화하고  
-			.transition()		// 변환 시작
-			.duration(1000)		// 1초동안 애니매이션하게 설정
-			.ease("linear")		// ease 보간을 리니어로 처리
-			.attr("transform", "translate(" + x(-1) + ",0)")   //  변환행렬 설정   # 패스를 다시 그리는 방식                                                                                     //  아니라 좌표를 변환함으로써 출렁거리는것을 막는다. 
-			.each("end", tick);    //tick 함수 계속 호출 
+//		humidity_path
+//			.attr("d", line)
+//			.attr("transform", null)	// 기존 변환 행렬을 초기화하고  
+//			.transition()		// 변환 시작
+//			.duration(1000)		// 1초동안 애니매이션하게 설정
+//			.ease("linear")		// ease 보간을 리니어로 처리
+//			.attr("transform", "translate(" + x(-1) + ",0)")   //  변환행렬 설정   # 패스를 다시 그리는 방식                                                                                     //  아니라 좌표를 변환함으로써 출렁거리는것을 막는다. 
+//			.each("end", tick);    //tick 함수 계속 호출 
 		temperature_path
 			.attr("d", line)
 			.attr("transform", null)	// 기존 변환 행렬을 초기화하고  
@@ -173,17 +155,17 @@ function graphStart(){
 			.ease("linear")		// ease 보간을 리니어로 처리
 			.attr("transform", "translate(" + x(-1) + ",0)")   //  변환행렬 설정   # 패스를 다시 그리는 방식                                                                                     //  아니라 좌표를 변환함으로써 출렁거리는것을 막는다. 
 			.each("end", tick);    //tick 함수 계속 호출 
-		door_path
-		.attr("d", line)
-		.attr("transform", null)	// 기존 변환 행렬을 초기화하고  
-		.transition()		// 변환 시작
-		.duration(1000)		// 1초동안 애니매이션하게 설정
-		.ease("linear")		// ease 보간을 리니어로 처리
-		.attr("transform", "translate(" + x(-1) + ",0)")   //  변환행렬 설정   # 패스를 다시 그리는 방식                                                                                     //  아니라 좌표를 변환함으로써 출렁거리는것을 막는다. 
-		.each("end", tick);    //tick 함수 계속 호출 
+//		door_path
+//		.attr("d", line)
+//		.attr("transform", null)	// 기존 변환 행렬을 초기화하고  
+//		.transition()		// 변환 시작
+//		.duration(1000)		// 1초동안 애니매이션하게 설정
+//		.ease("linear")		// ease 보간을 리니어로 처리
+//		.attr("transform", "translate(" + x(-1) + ",0)")   //  변환행렬 설정   # 패스를 다시 그리는 방식                                                                                     //  아니라 좌표를 변환함으로써 출렁거리는것을 막는다. 
+//		.each("end", tick);    //tick 함수 계속 호출 
 		//가장 오래된 데이터를 제거한다.
-		humidity_data.shift();
+		//humidity_data.shift();
 		temperature_data.shift();
-		door_data.shift();
+		//door_data.shift();
 	}	
 }

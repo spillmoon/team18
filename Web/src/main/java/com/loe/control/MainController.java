@@ -42,38 +42,29 @@ public class MainController {
 	@Autowired
 	private SimpMessagingTemplate template;
 
-	private static String paser(String body,String name) throws Exception{
-		System.out.println("name " + name);
-		if(name.equals("content")){
-			JSONParser jsonParser = new JSONParser();
-			JSONObject result =(JSONObject) jsonParser.parse(body);
-			JSONObject cin = (JSONObject) result.get("cin");
-		    return (String)cin.get("con");	
-		}
+	private static String paser(String body) throws Exception {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject result = (JSONObject) jsonParser.parse(body);
-	    JSONObject sgn = (JSONObject) result.get("sgn");
-	    JSONObject nev = (JSONObject) sgn.get("nev");
-        JSONObject rep = (JSONObject) nev.get("rep");
-	    JSONObject om = (JSONObject) nev.get("om");
-        if(om.get("op").toString().equals("1")){
-            return new String(Base64Utils.decodeFromString((String) rep.get("value"))); 	
-        }else{
-        	return om.get("op").toString();
-        } 
+		JSONObject sgn = (JSONObject) result.get("m2m:sgn");
+		JSONObject nev = (JSONObject) sgn.get("nev");
+		JSONObject rep = (JSONObject) nev.get("rep");
+		JSONObject om = (JSONObject) nev.get("om");
+		if (om.get("op").toString().equals("1")) {
+			JSONObject cin = (JSONObject) rep.get("m2m:cin");
+			return (String) cin.get("con");
+		}else{
+			return "error";
+		}
 	}
 
-	@RequestMapping(value="/dashboard", method=RequestMethod.POST)
-	@ResponseStatus(value=HttpStatus.OK)
+	@RequestMapping(value = "/dashboard", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
 	public void dashboard(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
-		String content = paser(paser(body,"representation"),"content");
+		String content = paser(body);
         System.out.println("Before base 64 : "+ content);
         if(content.equals("4")){
         	System.out.println("contentInstance is Deleted");
         }else{
-        	//content = "{ \""+content.split("'")[1]+"\" :  \""+content.split("'")[3]+"\" , \""+content.split("'")[5]+"\" :  \""+content.split("'")[7]+"\" , \""+content.split("'")[9]+"\" :  \""+content.split("'")[11]+"\" }";
-            content = new String(Base64Utils.decodeFromString((String)content));
-
             HttpEntity<String> entity = new HttpEntity<String>(content, headers);
     		this.template.convertAndSend("/topic/subscribe",entity);
         }
@@ -81,8 +72,8 @@ public class MainController {
 	}
 	
 
- /* 마그네틱센서에서 값을 넘겨 받으면 전구를 키는 함수
-	@RequestMapping(value="/m2m", method=RequestMethod.POST) // 서버에서 보내온 정보를 구독함.
+ /* 留덇렇�꽕�떛�꽱�꽌�뿉�꽌 媛믪쓣 �꽆寃� 諛쏆쑝硫� �쟾援щ�� �궎�뒗 �븿�닔
+	@RequestMapping(value="/m2m", method=RequestMethod.POST) // �꽌踰꾩뿉�꽌 蹂대궡�삩 �젙蹂대�� 援щ룆�븿.
 	@ResponseStatus(value=HttpStatus.OK)
 	public void notify(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
 		String content = paser(paser(body,"representation"),"content");
@@ -95,12 +86,12 @@ public class MainController {
 		       System.out.println("value : " +value);
 		       String light_url ="";
 			    String led_url ="";
-			    if(value.equals("1")){  //창문 OPEN
+			    if(value.equals("1")){  //李쎈Ц OPEN
 			    	System.out.println("window OPEN");
 			    	sendMgmt(url, device_id, "switch1", "ON","switch2","ON", dKey);
 					HttpEntity<String> entity = new HttpEntity<String>(content, headers);
 					this.template.convertAndSend("/topic/subscribe2", entity);
-			    }else if(value.equals("0")){ //창문 Close
+			    }else if(value.equals("0")){ //李쎈Ц Close
 			    	System.out.println("window CLOSE");
 			    	sendMgmt(url, device_id, "switch1", "OFF", "switch2","OFF",dKey);
 					HttpEntity<String> entity = new HttpEntity<String>(content, headers);
@@ -115,7 +106,7 @@ public class MainController {
 	    
 	}	
 */
-	@MessageMapping("/timeline") // 데모 페이지로 보냄.
+	@MessageMapping("/timeline") // �뜲紐� �럹�씠吏�濡� 蹂대깂.
 	@SendTo("/topic/subscribe")
 	public HttpEntity<String> timeline(@RequestBody String body) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
@@ -123,7 +114,7 @@ public class MainController {
 		HttpEntity<String> entity = new HttpEntity<String>(body, headers);
 		return entity;
 	}
-	@MessageMapping("/realwindow") // 데모 페이지로 보냄.
+	@MessageMapping("/realwindow") // �뜲紐� �럹�씠吏�濡� 蹂대깂.
 	@SendTo("/topic/subscribe2")
 	public HttpEntity<String> realwindow(@RequestBody String body) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
@@ -134,18 +125,18 @@ public class MainController {
 
 	
 public void sendMgmt(String url,String deviceName, String cmdName, String cmd, String cmdName1, String cmd1, String dKey) throws ParseException, IOException{
-	 //RP05 -> 전구
-   String desUrl = url+"/control-"+deviceName;
+	 //RP05 -> �쟾援�
+   String desUrl = url+"/controller-"+deviceName;
    System.out.println("desurl : " + desUrl);
     CloseableHttpClient httpclient = HttpClients.createDefault();
 	try {
 		HttpPut httpPut = new HttpPut(desUrl);
-		httpPut.setHeader("X-M2M-RI", "RQI0001"); // 리퀘스트 ID
-		httpPut.setHeader("X-M2M-Origin", "/S"+deviceName); // 제어자 이름
+		httpPut.setHeader("X-M2M-RI", "RQI0001"); // 由ы�섏뒪�듃 ID
+		httpPut.setHeader("X-M2M-Origin", "/S"+deviceName); // �젣�뼱�옄 �씠由�
 		httpPut.setHeader("Accept", "application/json");
 		httpPut.setHeader("Authorization","Bearer "+dKey);
 		httpPut.setHeader("Content-Type","application/vnd.onem2m-res+json");		
-		String body="{ \"mgc\": {\"cmt\": 4,\"exra\": { \"any\":[{\"nm\" :\""+cmdName+"\", \"val\" : \""+cmd+"\"}, {\"nm\" :\""+cmdName1+"\", \"val\" : \""+cmd1+"\"} ]},\"exm\" : 1,\"exe\":true,\"pexinc\":true}}";
+		String body="{ \"m2m:mgc\": {\"cmt\": 4,\"exra\": { \"any\":[{\"nm\" :\""+cmdName+"\", \"val\" : \""+cmd+"\"} ]},\"exm\" : 1,\"exe\":true,\"pexinc\":false}}";
 		System.out.println(body);
 		httpPut.setEntity(new StringEntity(body));
 		
@@ -175,9 +166,9 @@ public void sendToplug(@RequestBody String body, @RequestHeader HttpHeaders head
 	System.out.println("in sendtoplug");  
 	System.out.println(body);
 	if(body.equals("ON")){
-		sendMgmt(url, device_id, "switch", "ON", "switch1", "null", dKey);
+		sendMgmt(url, device_id, "switch", "1", "switch1", "null", dKey);
 	}else {
-		sendMgmt(url, device_id, "switch", "OFF", "switch1", "null", dKey);
+		sendMgmt(url, device_id, "switch", "0", "switch1", "null", dKey);
 	}
 	
 }
