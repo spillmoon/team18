@@ -1,12 +1,12 @@
 package com.loe.control;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -18,13 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +56,7 @@ public class MainController {
     @ResponseStatus(value = HttpStatus.OK)
 	public void dashboard(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
 		String content = paser(body);
-        System.out.println("Before base 64 : "+ content);
+        System.out.println("Dashboard in : "+ content);
         if(content.equals("4")){
         	System.out.println("contentInstance is Deleted");
         }else{
@@ -107,16 +102,29 @@ public class MainController {
 	}	
 */
 
-	
-	public void sendMgmt(String url,String deviceName, String cmdName, String cmd, String cmdName1, String cmd1, String dKey) throws ParseException, IOException{
-		 //RP05 -> �쟾援�
-	   String desUrl = url+"/controller-"+deviceName;
-	   System.out.println("desurl : " + desUrl);
+	/**
+	 * 
+	 * @param iotPlatformUrl : iot플랫폼 주소
+	 * @param device_id : OID(디바이스아이디)
+	 * @param cmdName : 명령키 (ex..switch)
+	 * @param cmd : 명령값 (ex..0 or 1, ON or OFF, on or off ..etc)
+	 * @param cmdName1
+	 * @param cmd1
+	 * @param dKey   : 디바이스인증키
+	 * @throws ParseException
+	 * @throws IOException
+	 */
+	public void sendMgmt(String iotPlatformUrl,String device_id, String cmdName, String cmd, String cmdName1, String cmd1, String dKey) throws ParseException, IOException{
+	   String resourceUrl = iotPlatformUrl+"/controller-"+device_id;
+	   System.out.println("iotPlatformResourceUrl : " + resourceUrl);
+	   System.out.println("OID : " + device_id);
+	   System.out.println("commandName : " + cmdName);
+	   System.out.println("command : " + cmd);
 	    CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
-			HttpPut httpPut = new HttpPut(desUrl);
-			httpPut.setHeader("X-M2M-RI", "RQI0001"); // 由ы�섏뒪�듃 ID
-			httpPut.setHeader("X-M2M-Origin", "/S"+deviceName); // �젣�뼱�옄 �씠由�
+			HttpPut httpPut = new HttpPut(resourceUrl);
+			httpPut.setHeader("X-M2M-RI", "RQI0001"); // 
+			httpPut.setHeader("X-M2M-Origin", "/S"+device_id); //
 			httpPut.setHeader("Accept", "application/json");
 			httpPut.setHeader("Authorization","Bearer "+dKey);
 			httpPut.setHeader("Content-Type","application/vnd.onem2m-res+json");		
@@ -133,7 +141,7 @@ public class MainController {
 					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
 				    System.out.println(EntityUtils.toString(entity));
 				}else{
-					System.out.println("eerr");
+					System.out.println("sendMgmt eerr");
 				}
 			} finally {
 				res.close();
@@ -144,6 +152,51 @@ public class MainController {
 
 	}
 
+     /**
+      * 	
+      * @param meesagePlatformUrl : 메시지플랫폼url
+      * @param send_phone : 카카오 메시지를 받을 핸드폰 번호
+      * @param sender_key : API 발송 key   d6b73318d4927aa80df1022e07fecf06c55b44bf
+      * @param authKey : 인증키
+      * @param message : 보낼 메시지
+      * @return
+      * @throws Exception
+      */
+	public int sendMesageAPI(String meesagePlatformUrl, String send_phone, String authKey, String sender_key, String message)throws Exception{
+		
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		try {
+			HttpPost httpPost = new HttpPost(meesagePlatformUrl);
+			//httpPost.setHeader("Authorization", "Basic Y2xhc3M6bm90X29wZW5fYXBp");
+			httpPost.setHeader("Authorization", "Basic "+authKey);
+			httpPost.setHeader("Content-Type", "application/json; charset=EUC-KR");
+			String body2 = "{ \"msg_id\" : \"iot\", \"dest_phone\" : \""+send_phone+"\", \"send_phone\" : \""+send_phone+"\", \"sender_key\" : \""+sender_key+"\", \"msg_body\" : \""+message+"\", \"ad_flag\" : \"N\" }";
+			
+	        ByteArrayEntity entity = new ByteArrayEntity(body2.getBytes("UTF-8"));
+
+			System.out.println("TO Kakao BODY Message : " + body2);
+			httpPost.setEntity(entity);
+
+			CloseableHttpResponse res = httpclient.execute(httpPost);
+
+			try {
+				if (res.getStatusLine().getStatusCode() == 200) {
+					org.apache.http.HttpEntity entity2 = (org.apache.http.HttpEntity) res.getEntity();
+					System.out.println(EntityUtils.toString(entity2));
+				} else {
+					System.out.println("eerr");
+				}
+			} finally {
+				res.close();
+			}
+		} finally {
+			httpclient.close();
+		}
+		return 0;
+		
+	}
+	
+	
 	@RequestMapping(value="/sendtoplug", method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.OK)
 	public void sendToplug(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
