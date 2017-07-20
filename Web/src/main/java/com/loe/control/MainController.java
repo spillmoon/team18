@@ -106,72 +106,56 @@ public class MainController {
 	    
 	}	
 */
-	@MessageMapping("/timeline") // �뜲紐� �럹�씠吏�濡� 蹂대깂.
-	@SendTo("/topic/subscribe")
-	public HttpEntity<String> timeline(@RequestBody String body) throws Exception {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-		return entity;
-	}
-	@MessageMapping("/realwindow") // �뜲紐� �럹�씠吏�濡� 蹂대깂.
-	@SendTo("/topic/subscribe2")
-	public HttpEntity<String> realwindow(@RequestBody String body) throws Exception {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-		return entity;
-	}
 
 	
-public void sendMgmt(String url,String deviceName, String cmdName, String cmd, String cmdName1, String cmd1, String dKey) throws ParseException, IOException{
-	 //RP05 -> �쟾援�
-   String desUrl = url+"/controller-"+deviceName;
-   System.out.println("desurl : " + desUrl);
-    CloseableHttpClient httpclient = HttpClients.createDefault();
-	try {
-		HttpPut httpPut = new HttpPut(desUrl);
-		httpPut.setHeader("X-M2M-RI", "RQI0001"); // 由ы�섏뒪�듃 ID
-		httpPut.setHeader("X-M2M-Origin", "/S"+deviceName); // �젣�뼱�옄 �씠由�
-		httpPut.setHeader("Accept", "application/json");
-		httpPut.setHeader("Authorization","Bearer "+dKey);
-		httpPut.setHeader("Content-Type","application/vnd.onem2m-res+json");		
-		String body="{ \"m2m:mgc\": {\"cmt\": 4,\"exra\": { \"any\":[{\"nm\" :\""+cmdName+"\", \"val\" : \""+cmd+"\"} ]},\"exm\" : 1,\"exe\":true,\"pexinc\":false}}";
-		System.out.println(body);
-		httpPut.setEntity(new StringEntity(body));
-		
-	
-		CloseableHttpResponse res = httpclient.execute(httpPut);
-
+	public void sendMgmt(String url,String deviceName, String cmdName, String cmd, String cmdName1, String cmd1, String dKey) throws ParseException, IOException{
+		 //RP05 -> �쟾援�
+	   String desUrl = url+"/controller-"+deviceName;
+	   System.out.println("desurl : " + desUrl);
+	    CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
-			if (res.getStatusLine().getStatusCode() == 200)
-			{
-				org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
-			    System.out.println(EntityUtils.toString(entity));
-			}else{
-				System.out.println("eerr");
+			HttpPut httpPut = new HttpPut(desUrl);
+			httpPut.setHeader("X-M2M-RI", "RQI0001"); // 由ы�섏뒪�듃 ID
+			httpPut.setHeader("X-M2M-Origin", "/S"+deviceName); // �젣�뼱�옄 �씠由�
+			httpPut.setHeader("Accept", "application/json");
+			httpPut.setHeader("Authorization","Bearer "+dKey);
+			httpPut.setHeader("Content-Type","application/vnd.onem2m-res+json");		
+			String body="{ \"m2m:mgc\": {\"cmt\": 4,\"exra\": { \"any\":[{\"nm\" :\""+cmdName+"\", \"val\" : \""+cmd+"\"} ]},\"exm\" : 1,\"exe\":true,\"pexinc\":false}}";
+			System.out.println(body);
+			httpPut.setEntity(new StringEntity(body));
+			
+		
+			CloseableHttpResponse res = httpclient.execute(httpPut);
+
+			try {
+				if (res.getStatusLine().getStatusCode() == 200)
+				{
+					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
+				    System.out.println(EntityUtils.toString(entity));
+				}else{
+					System.out.println("eerr");
+				}
+			} finally {
+				res.close();
 			}
 		} finally {
-			res.close();
+			httpclient.close();
 		}
-	} finally {
-		httpclient.close();
+
 	}
 
-}
-
-@RequestMapping(value="/sendtoplug", method=RequestMethod.POST)
-@ResponseStatus(value=HttpStatus.OK)
-public void sendToplug(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
-	System.out.println("in sendtoplug");  
-	System.out.println(body);
-	if(body.equals("ON")){
-		sendMgmt(url, device_id, "switch", "1", "switch1", "null", dKey);
-	}else {
-		sendMgmt(url, device_id, "switch", "0", "switch1", "null", dKey);
+	@RequestMapping(value="/sendtoplug", method=RequestMethod.POST)
+	@ResponseStatus(value=HttpStatus.OK)
+	public void sendToplug(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
+		System.out.println("in sendtoplug");  
+		System.out.println(body);
+		if(body.equals("ON")){
+			sendMgmt(url, device_id, "switch", "1", "switch1", "null", dKey);
+		}else {
+			sendMgmt(url, device_id, "switch", "0", "switch1", "null", dKey);
+		}
+		
 	}
-	
-}
 
 
 	
