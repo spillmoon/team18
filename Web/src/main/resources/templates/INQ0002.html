@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Angel-in-us Coffee</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="/css/inquery.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+	<!-- jQuery -->
+    <script src="../../common/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../../common/js/bootstrap.min.js"></script>
+    
+	<!-- Custom JS -->
+    <script type="text/javascript" src="/js/INQ0002.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-logo" href="#"> <img
+					src="/images/angel_logo.png" />
+				</a> <a href="#"> <span class="glyphicon">&#xe062;</span>
+				</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><span>현재 매장</span></a></li>
+					<li><a href="#"><span>매장 찾기</span></a></li>
+					<li><a href="#"><span>건의사항</span></a></li>
+					<li><a href="#"><span>쿠폰함</span></a></li>
+					<li><a href="#"><span>이벤트</span></a></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container -->
+	</nav>
+
+    <!-- Page container -->
+    <div class="container" style="background-color:rgb(250, 250, 250);margin-top:50px">
+      <div class="inquery_title">
+        문의하기
+      </div>
+      <hr/>
+
+      <!-- 문의 내용 -->
+      <div class="form-group">
+        <label for="comment">Comment</label>
+        <textarea class="form-control" rows="5" id="message"></textarea>
+      </div>
+      <hr/>
+
+      <div class="col-xs-6">
+        <button id="register" type="button" class="btn btn-block btn-register btn-lg">등록</button>
+      </div>
+      <div class="col-xs-6">
+        <button id="not_register" type="button" class="btn btn-block btn-default btn-lg">취소</button>
+      </div>
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <div class="container">
+      <footer>
+          <div class="row">
+              <div class="col-lg-12">
+                  <p>&copy; ANGELINUS.COM</p>
+              </div>
+          </div>
+      </footer>
+    </div>
+    <!-- /.footer -->
+  </body>
+</html>

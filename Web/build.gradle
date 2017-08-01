@@ -67,7 +67,11 @@ dependencies {
 	// httpclient
 	compile("org.apache.httpcomponents:httpclient:${version.httpclient}")	
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
-	
+	compile("org.springframework.boot:spring-boot-starter-jdbc")
+	compile("mysql:mysql-connector-java")
+	compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1")
+	compile("org.mybatis:mybatis-spring")
+	compile("org.mybatis:mybatis")
 }
 
 

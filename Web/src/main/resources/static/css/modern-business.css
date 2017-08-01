@@ -1,0 +1,116 @@
+/*!
+ * Start Bootstrap - Modern Business (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+/* Global Styles */
+
+html,
+body {
+  background-color: rgb(250, 250, 250);
+    height: 100%;
+}
+
+body {
+    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+.img-portfolio {
+    margin-bottom: 30px;
+}
+
+.img-hover:hover {
+    opacity: 0.8;
+}
+
+/* Home Page Carousel */
+
+header.carousel {
+    height: 90%;
+}
+
+header.carousel .item,
+header.carousel .item.active,
+header.carousel .carousel-inner {
+    height: 100%;
+}
+
+header.carousel .fill {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
+/* 404 Page Styles */
+
+.error-404 {
+    font-size: 100px;
+}
+
+/* Pricing Page Styles */
+
+.price {
+    display: block;
+    font-size: 50px;
+    line-height: 50px;
+}
+
+.price sup {
+    top: -20px;
+    left: 2px;
+    font-size: 20px;
+}
+
+.period {
+    display: block;
+    font-style: italic;
+}
+
+/* Responsive Styles */
+
+@media(max-width:991px) {
+    .customer-img,
+    .img-related {
+        margin-bottom: 30px;
+    }
+}
+
+@media(max-width:767px) {
+    .img-portfolio {
+        margin-bottom: 15px;
+    }
+
+    header.carousel .carousel {
+        height: 70%;
+    }
+}
+
+.sub_title {
+	position:relative; 
+	top:7px;
+	height:2.187em; 
+	text-align:center;
+	margin-left:-15px;
+	margin-right:-15px;
+	background:#e5e5e5;
+}
+.sub_title .sub_logo.font_en {
+	line-height:2.53em;
+	text-transform: uppercase;
+}
+
+.event_list {
+	list-style:none;
+	margin:0; padding:0; border:0; outline:0;
+	margin-top:10px;
+	margin-left:-15px;
+	margin-right:-15px;
+}
+.event_list li {position:relative; border-top:0.625em solid #f2f2f2;}
+.event_list li:first-child {border-top:0;}
+.event_list li img {width:100%; height:7.187em;}
+.event_list li a {display:block; height:100%;}
+.event_list li a p {padding:0.937em; font-size:0.875em; line-height:1.187em; color:#3d4147; font-weight:bold;}
+.event_list li a p .date {display:block; font-weight:normal; font-size:0.85em; color:#999; margin-top:0.468em;}

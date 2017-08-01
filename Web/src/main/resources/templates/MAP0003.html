@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+<title>Angel-in-us Coffee</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="/css/bootstrap.css" rel="stylesheet" />
+
+<!-- Custom CSS -->
+<link href="/css/map.css" rel="stylesheet" />
+
+<!-- Custom Fonts -->
+<link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+	type="text/css" />
+
+<!-- jQuery -->
+<script src="/js/jquery.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom JS -->
+<script type="text/javascript" src="../js/MAP0003.js"></script>
+</head>
+<body>
+	<!-- Navigation -->
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-logo" href="#"> <img
+					src="/images/angel_logo.png" />
+				</a> <a href="#"> <span class="glyphicon">&#xe062;</span>
+				</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><span>현재 매장</span></a></li>
+					<li><a href="#"><span>매장 찾기</span></a></li>
+					<li><a href="#"><span>건의사항</span></a></li>
+					<li><a href="#"><span>쿠폰함</span></a></li>
+					<li><a href="#"><span>이벤트</span></a></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container -->
+	</nav>
+
+	<!-- Page container -->
+	<div class="container"
+		style="background-color: rgb(250, 250, 250); margin-top: 50px">
+		<!-- 지점 이름 및 전체 상태 -->
+		<div class="row">
+			<div class="store_title">
+				<span class="store_name">롯데센터가산</span>
+				<div class="store_congestion busy">혼잡</div>
+			</div>
+		</div>
+
+		<!-- 지점에 대한 상태(온도, 습도, 좌석, 미세먼지 등) -->
+		<div class="row">
+			<div class="store_state">
+				<div>
+					공석 : <span id="emptySeat">2</span>석
+				</div>
+				<div>
+					온도 : <span id="temperature">25</span>℃
+				</div>
+				<div>
+					습도 : <span id="humidity">40</span>%
+				</div>
+				<div>
+					미세먼지 : <span id="dust">10</span>㎍/m³
+				</div>
+			</div>
+		</div>
+
+		<!-- 지점 내부지도 -->
+		<div class="row">
+			<div class="store_floor">
+				<button id="firstFloor" type="button"
+					class="btn btn-default disabled">1층</button>
+				<button id="secondFloor" type="button" class="btn btn-default">2층</button>
+			</div>
+			<div class="store_map">
+				<div id="seat1"></div>
+				<div id="seat2"></div>
+				<div id="seat3"></div>
+				<div id="seat4"></div>
+				<div id="seat5"></div>
+				<div id="seat6"></div>
+				<div id="noise1" class="middle"></div>
+				<div id="noise2" class="low"></div>
+				<div id="noise3" class="high"></div>
+			</div>
+		</div>
+
+		<!-- 관리자와의 대화 & 설명 스크립트 -->
+		<div class="row">
+			<div class="store_inquery">
+				<button id="inquery" type="button" class="btn btn-default">
+					관리자에게<br/>문의하기
+				</button>
+			</div>
+			<div class="store_info">
+				<table>
+					<tr>
+						<td class="info_box empty"></td>
+						<td class="info_contents">&nbsp;&nbsp;빈 좌석</td>
+					</tr>
+					<tr>
+						<td class="info_box full"></td>
+						<td class="info_contents">&nbsp;&nbsp;사용 중</td>
+					</tr>
+					<tr>
+						<td class="info_box low"></td>
+						<td class="info_contents" colspan="3">&nbsp;&nbsp;조용한 분위기</td>
+					</tr>
+					<tr>
+						<td class="info_box middle"></td>
+						<td class="info_contents" colspan="3">&nbsp;&nbsp;가벼운 대화 분위기</td>
+					</tr>
+					<tr>
+						<td class="info_box high"></td>
+						<td class="info_contents" colspan="3">&nbsp;&nbsp;활발한 분위기</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- /.container -->
+
+	<!-- Footer -->
+	<div class="container" style="margin-top: 50px;">
+		<footer>
+			<div class="row">
+				<div class="col-lg-12">
+					<p>&copy; ANGELINUS.COM</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<!-- /.footer -->
+</body>
+</html>

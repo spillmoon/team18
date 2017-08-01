@@ -1,0 +1,56 @@
+body{
+	background-color: rgb(250, 250, 250);
+}
+
+.coupon_title{
+	font-size:20px;
+	text-align:center;
+	margin-top:13px;
+	padding-bottom:6px;
+}
+
+.coupon{
+	margin-bottom:20px;
+	width:100%;
+	height:136.5px;
+	border:1px solid rgb(79, 84, 90);
+}
+.coupon_image{
+	width:100%;
+	height:100px;
+}
+.coupon_barcode{
+	padding-top:7.8px;
+	font-size:15px;
+	width:100%;
+	height:35px;
+	background-color:rgb(79, 84, 90);
+	color:white;
+	text-align:center;
+	border:0;
+}
+
+#coupon1{
+	background-image:url('../images/coupon1.png');
+	background-size: 100% 100px;
+	background-repeat: no-repeat;
+}
+#coupon2{
+	background-image:url('../images/coupon2.png');
+	background-size: 100% 100px;
+	background-repeat: no-repeat;
+}
+#coupon3{
+	background-image:url('../images/coupon3.png');
+	background-size: 100% 100px;
+	background-repeat: no-repeat;
+}
+
+.barcode{
+	top:150px;
+	border-radius:0px;
+}
+.barcode_image{
+	height:150px;
+	text-align:center;
+}
