@@ -1,7 +1,9 @@
 package com.loe.control;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.ParseException;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.loe.model.StoreInfoVO;
 import com.loe.model.UserInfoVO;
 import com.loe.service.MainService;
 
@@ -63,6 +66,31 @@ public class MainController {
 		}
 	}
 	
+	@RequestMapping(value = "/getStoreList", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public List<StoreInfoVO> getStoreList(@RequestParam Map<String, String> body) throws Exception {
+		System.out.println("body: " + body);
+		HashMap<String, String> map = new HashMap<String, String>();
+		List<StoreInfoVO> storeList = null;
+		try{
+			String centerX, centerY;
+			centerX = body.get("centerX").toString();
+			centerY = body.get("centerY").toString();
+			
+			map.put("centerX", centerX);
+			map.put("centerY", centerY);
+			
+			storeList = (List<StoreInfoVO>) service.getStoreList(map);
+			for(int i =0; i< storeList.size(); i++)
+				System.out.println(storeList.get(i).getStore_name());
+			
+		}catch(Exception e){
+			map.put("result", "false");
+			System.out.println(e.getMessage());
+		}
+		return storeList;
+	}
 
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
@@ -95,6 +123,7 @@ public class MainController {
 			}
 		}catch(Exception e){
 			map.put("result", "error");
+			System.out.println(e.getMessage());
 		}		
         return map;
 	}
