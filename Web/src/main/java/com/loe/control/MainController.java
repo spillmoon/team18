@@ -1,10 +1,12 @@
 package com.loe.control;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.loe.model.MessageInfoVO;
 import com.loe.model.StoreInfoVO;
 import com.loe.model.UserInfoVO;
 import com.loe.service.MainService;
@@ -66,11 +69,62 @@ public class MainController {
 		}
 	}
 	
+	@RequestMapping(value = "/writeMessage", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> writeMessage(@RequestParam Map<String, String> body) throws Exception {
+		HashMap<String, String> map = new HashMap<String, String>();
+		try{
+			String user_id, message, store_index;
+			store_index = body.get("store_index").toString();
+			user_id = body.get("user_id").toString();
+			message = body.get("message").toString();
+			
+			map.put("user_id", user_id);
+			map.put("message", message);
+			map.put("store_index", store_index);
+			
+			int result = service.writeMessage(map);
+			if(result >= 1){
+				System.out.println("writeMessage true");
+				map.put("result", "true");
+			}else{
+				System.out.println("writeMessage fail");
+				map.put("result", "false");
+			}
+		}catch(Exception e){
+			map.put("result", "error");
+			System.out.println(e.getMessage());
+		}
+		return map;
+	}
+	
+	@RequestMapping(value = "/messageList", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public List<MessageInfoVO> messageList(@RequestParam Map<String, String> body) throws Exception {
+		System.out.println("body: " + body);
+		HashMap<String, String> map = new HashMap<String, String>();
+		List<MessageInfoVO> messageList = null;
+		try{
+			String id = body.get("user_id").toString();
+			map.put("user_id", id);
+			
+			messageList = service.messageList(map);
+			for(int i =0; i<messageList.size(); i++)
+				System.out.println(messageList.get(i).getMessage());
+		}catch(Exception e){
+			map.put("result", "false");
+			System.out.println(e.getMessage());
+		}
+		return messageList;
+	}
+	
+	
 	@RequestMapping(value = "/getStoreList", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public List<StoreInfoVO> getStoreList(@RequestParam Map<String, String> body) throws Exception {
-		System.out.println("body: " + body);
 		HashMap<String, String> map = new HashMap<String, String>();
 		List<StoreInfoVO> storeList = null;
 		try{
@@ -81,7 +135,7 @@ public class MainController {
 			map.put("centerX", centerX);
 			map.put("centerY", centerY);
 			
-			storeList = (List<StoreInfoVO>) service.getStoreList(map);
+			storeList = service.getStoreList(map);
 			for(int i =0; i< storeList.size(); i++)
 				System.out.println(storeList.get(i).getStore_name());
 			
@@ -95,14 +149,12 @@ public class MainController {
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public Map<String, String> userLogin(@RequestParam Map<String, String> body) throws Exception {
-		System.out.println("body: " + body);
+	public Map<String, String> userLogin(@RequestParam Map<String, String> body, HttpServletRequest req) throws Exception {
 		HashMap<String, String> map = new HashMap<String, String>();
 		try{
 			String id, pw;
 			id = body.get("user_id").toString();
 			pw = body.get("user_pw").toString();
-			System.out.println("Receive Data: " + id + " " + pw);
 			
 			if(id == null || pw == null){
 				map.put("result", "false");
@@ -116,6 +168,9 @@ public class MainController {
 				if(user.getUser_id().equals(id) && user.getUser_pw().equals(pw)){
 					System.out.println("userLogin true");
 					map.put("result", "true");
+					
+					HttpSession session = req.getSession();
+					session.setAttribute("id", id);
 				}else{
 					System.out.println("userLogin fail");
 					map.put("result", "false");
@@ -132,7 +187,6 @@ public class MainController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public Map<String, String> userJoin(@RequestParam Map<String, String> body) throws Exception {
-		System.out.println("body: " + body);
 		HashMap<String, String> map = new HashMap<String, String>();
 		try{
 			String id, pw, name, email;
@@ -140,7 +194,6 @@ public class MainController {
 			pw = body.get("user_pw").toString();
 			name = body.get("user_name").toString();
 			email = body.get("user_email").toString();
-			System.out.println("Receive Data: " + id + " " + pw + " " + name + " " + email);
 			
 			if(id == null || pw == null || name == null || email == null){
 				map.put("result", "false");

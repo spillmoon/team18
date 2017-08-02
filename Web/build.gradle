@@ -24,7 +24,7 @@ targetCompatibility = 1.7
 
 repositories {
 	mavenCentral()
-	}
+}
 
 def version = [
   jquery: '1.11.3'

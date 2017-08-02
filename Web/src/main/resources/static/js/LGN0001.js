@@ -11,10 +11,18 @@ $(document).ready(function(){
 				"user_pw" : userPwd
 			},
 			success : function(msg) {
-				window.location.href = "main";
+				if(msg.result == "true"){
+					window.location.href = "main";
+				}
+				else if(msg.result == "false"){
+					alert("에러가 발생하였습니다. 관리자에게 문의해주세요.");
+				}
+				else{
+					alert("아이디 혹은 패스워드가 다릅니다.");
+				}
 			},
 			error : function(xhr, status, error) {
-				alert("아이디 혹은 비밀번호가 잘못되었습니다.");
+				alert("에러가 발생하였습니다. 관리자에게 문의해주세요.");
 			}
 		});
 	});

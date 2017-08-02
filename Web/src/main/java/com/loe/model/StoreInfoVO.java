@@ -7,7 +7,14 @@ public class StoreInfoVO {
 	private String store_longitude;
 	private String store_address;
 	private String store_tel;
+	private int store_congestion;
 	
+	public int getStore_congestion() {
+		return store_congestion;
+	}
+	public void setStore_congestion(int store_congestion) {
+		this.store_congestion = store_congestion;
+	}
 	public int getStore_index() {
 		return store_index;
 	}

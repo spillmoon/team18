@@ -27,8 +27,28 @@
 			SELECT *
 			FROM cafe_store
 			WHERE (6371*acos(cos(radians(#{centerX}))*cos(radians(store_latitude))*cos(radians(store_longitude)
-					-radians(#{centerY}))+sin(radians(#{centerX}))*sin(radians(store_latitude)))) < 1
+					-radians(#{centerY}))+sin(radians(#{centerX}))*sin(radians(store_latitude)))) < 2
 			LIMIT 0,10;
 		]]>
+	</select>
+	<insert id="writeMessage" parameterType="java.util.HashMap">
+		insert into cafe_inq
+		(
+			store_index,
+			user_id,
+			message
+		)
+		values
+		(
+			#{store_index},
+			#{user_id},
+			#{message}
+		)
+	</insert>
+	<select id="messageList" parameterType="java.util.Map" resultType="com.loe.model.MessageInfoVO">
+		select store_name, reg_date, message
+		from cafe_store s, cafe_inq i
+		where s.store_index = i.store_index
+		and i.user_id = #{user_id};
 	</select>
 </mapper>

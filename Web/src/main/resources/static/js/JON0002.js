@@ -30,12 +30,20 @@ $(document).ready(function() {
 						"user_pw" : userPw,
 						"user_id" : userId
 					},
-					success : function(msg) {
-						alert("회원가입에 성공하였습니다.");
-						window.location.href = "login";
+					success : function(msg) {	
+						if(msg.result == "true"){
+							alert("회원가입에 성공하였습니다.");
+							window.location.href = "login";
+						}
+						else if(msg.result == "false"){
+							alert("에러가 발생하였습니다. 관리자에게 문의해주세요.");
+						}
+						else{
+							alert("중복된 아이디가 존재합니다. 다른 아이디를 사용해주세요.");
+						}
 					},
 					error : function(xhr, status, error) {
-						alert("중복된 아이디가 존재합니다. 다른 아이디를 입력해주세요.");
+						alert("에러가 발생하였습니다. 관리자에게 문의해주세요.");
 					}
 				});
 			}

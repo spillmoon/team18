@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.loe.mapper.UserMapper;
+import com.loe.model.MessageInfoVO;
 import com.loe.model.StoreInfoVO;
 import com.loe.model.UserInfoVO;
 import com.loe.service.MainService;
@@ -31,6 +32,15 @@ public class MainServiceImpl implements MainService {
 	public List<StoreInfoVO> getStoreList(HashMap<String, String> map) throws Exception {
 		return this.mapper.getStoreList(map);
 	}
-	
+
+	@Override
+	public int writeMessage(HashMap<String, String> map) throws Exception {
+		return this.mapper.writeMessage(map);
+	}
+
+	@Override
+	public List<MessageInfoVO> messageList(HashMap<String, String> map) throws Exception {
+		return this.mapper.messageList(map);
+	}
 	
 }
