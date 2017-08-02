@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loe.mapper.UserMapper">
-	<insert id="userInsert" parameterType="com.loe.model.UserInfoVO">
+	<insert id="userJoin" parameterType="com.loe.model.UserInfoVO">
 		insert into cafe_user 
 			(
 				user_id, 
@@ -17,4 +17,12 @@
 				#{user_name}
 			)
 	</insert>
+	<select id="userLogin" parameterType="java.util.HashMap" resultType="com.loe.model.UserInfoVO">
+		select user_id, user_pw, user_email, user_name
+		from cafe_user
+		where user_id = #{user_id} and user_pw = #{user_pw}
+	</select>
+	<select id="getStoreList" parameterType="java.util.HashMap" resultType="com.loe.model.StoreInfoVO">
+		
+	</select>
 </mapper>

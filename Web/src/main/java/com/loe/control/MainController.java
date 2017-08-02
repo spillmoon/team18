@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.loe.mapper.UserMapper;
 import com.loe.model.UserInfoVO;
+import com.loe.service.MainService;
 
 @Controller
 public class MainController { 
@@ -45,8 +45,9 @@ public class MainController {
 	private SimpMessagingTemplate template;
 	
 	@Autowired
-	private UserMapper mapper;
-
+	private MainService service;
+	
+	
 	private static String paser(String body) throws Exception {
 		JSONParser jsonParser = new JSONParser();
 		JSONObject result = (JSONObject) jsonParser.parse(body);
@@ -61,7 +62,87 @@ public class MainController {
 			return "error";
 		}
 	}
+	
 
+	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> userLogin(@RequestParam Map<String, String> body) throws Exception {
+		System.out.println("body: " + body);
+		HashMap<String, String> map = new HashMap<String, String>();
+		try{
+			String id, pw;
+			id = body.get("user_id").toString();
+			pw = body.get("user_pw").toString();
+			System.out.println("Receive Data: " + id + " " + pw);
+			
+			if(id == null || pw == null){
+				map.put("result", "false");
+			}
+			else{
+				map.put("user_id", id);
+				map.put("user_pw", pw);
+				
+				UserInfoVO user = service.userLogin(map);
+				
+				if(user.getUser_id().equals(id) && user.getUser_pw().equals(pw)){
+					System.out.println("userLogin true");
+					map.put("result", "true");
+				}else{
+					System.out.println("userLogin fail");
+					map.put("result", "false");
+				}
+			}
+		}catch(Exception e){
+			map.put("result", "error");
+		}		
+        return map;
+	}
+	
+	@RequestMapping(value = "/userJoin", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> userJoin(@RequestParam Map<String, String> body) throws Exception {
+		System.out.println("body: " + body);
+		HashMap<String, String> map = new HashMap<String, String>();
+		try{
+			String id, pw, name, email;
+			id = body.get("user_id").toString();
+			pw = body.get("user_pw").toString();
+			name = body.get("user_name").toString();
+			email = body.get("user_email").toString();
+			System.out.println("Receive Data: " + id + " " + pw + " " + name + " " + email);
+			
+			if(id == null || pw == null || name == null || email == null){
+				map.put("result", "false");
+			}
+			else{
+				UserInfoVO user = new UserInfoVO();
+				user.setUser_id(id);
+				user.setUser_pw(pw);
+				user.setUser_name(name);
+				user.setUser_email(email);
+				
+				int result = 0;
+				result= service.userJoin(user);
+				if(result > 0 ){
+					System.out.println("userJoin true");
+					map.put("result", "true");
+				}else{
+					System.out.println("userJoin fail");
+					map.put("result", "false");
+				}
+			}
+		}catch(Exception e){
+			map.put("result", "error");
+			System.out.println(e.getMessage());
+		}
+		return map;
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "/dashboard", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
 	public void dashboard(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
@@ -75,54 +156,19 @@ public class MainController {
         }
 	}
 	
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
-	@ResponseBody
-	public Map userLogin(@RequestParam Map body) throws Exception {
-		HashMap<String, String> map = new HashMap<String, String>();
-		
-		System.out.println("login in : "+ body);
-		System.out.println(body.get("user_id"));
-		System.out.println(body.get("user_pw"));
-		map.put("results", "true");
-		map.put("id", body.get("user_id").toString());
-		map.put("pw", body.get("user_pw").toString());
-		
-        return map;
-	}
 	
-	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	@ResponseStatus(value = HttpStatus.OK)
-	@ResponseBody
-	public Map userJoin(@RequestParam Map body) throws Exception {
-		System.out.println("body: " + body);
-		
-		String id, pw, name, email;
-		id = body.get("user_id").toString();
-		pw = body.get("user_pw").toString();
-		name = body.get("user_name").toString();
-		email = body.get("user_email").toString();
-		System.out.println("Receive Data: " + id + " " + pw + " " + name + " " + email);
-		
-		HashMap<String, String> map = new HashMap<String, String>();
-		UserInfoVO user = new UserInfoVO();
-		if(id == null || pw == null || name == null || email == null){
-			map.put("result", "false");
+	@RequestMapping(value="/sendtoplug", method=RequestMethod.POST)
+	@ResponseStatus(value=HttpStatus.OK)
+	public void sendToplug(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
+		System.out.println("in sendtoplug");  
+		System.out.println(body);
+		if(body.equals("ON")){
+			sendMgmt(url, device_id, "switch", "1", "switch1", "null", dKey);
+		}else {
+			sendMgmt(url, device_id, "switch", "0", "switch1", "null", dKey);
 		}
-		else{
-			map.put("result", "true");
-			
-			user.setUser_id(id);
-			user.setUser_pw(pw);
-			user.setUser_name(name);
-			user.setUser_email(email);
-			mapper.userInsert(user);
-		}
-		return map;
-	}
-	
-	
+		
+	}	
 	
  /* 留덇렇�꽕�떛�꽱�꽌�뿉�꽌 媛믪쓣 �꽆寃� 諛쏆쑝硫� �쟾援щ�� �궎�뒗 �븿�닔
 	@RequestMapping(value="/m2m", method=RequestMethod.POST) // �꽌踰꾩뿉�꽌 蹂대궡�삩 �젙蹂대�� 援щ룆�븿.
@@ -251,22 +297,5 @@ public class MainController {
 		}
 		return 0;
 		
-	}
-	
-	
-	@RequestMapping(value="/sendtoplug", method=RequestMethod.POST)
-	@ResponseStatus(value=HttpStatus.OK)
-	public void sendToplug(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
-		System.out.println("in sendtoplug");  
-		System.out.println(body);
-		if(body.equals("ON")){
-			sendMgmt(url, device_id, "switch", "1", "switch1", "null", dKey);
-		}else {
-			sendMgmt(url, device_id, "switch", "0", "switch1", "null", dKey);
-		}
-		
-	}
-
-
-	
+	}	
 }

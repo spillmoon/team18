@@ -1,38 +1,19 @@
-var page = {
-	init : function() {
-		page.initInterface();
-	},
+function login() {
+	var userId = $("#user_id").val().trim();
+	var userPwd = $("#user_pw").val().trim();
 
-	initInterface : function() {
-		// 로그인 버튼 클릭 시
-		// 1) ID, PWD read
-		// 2) DM00001 --> Network API
-		$(".bt_login").click(function() {
-			var userId = $("#user_id").val().trim();
-			var userPwd = $("#user_pw").val().trim();
-
-			LEMP.Network.requestLogin({
-				"_sUserId" : userId,
-				"_sPassword" : userPwd,
-				"_sTrcode" : "T18002",
-				"_oBody" : {
-					"user_id" : userId,
-					"user_pw" : userPwd
-				},
-				"_fCallback" : function(resT18002) {
-					if (resT18002.header.result == true) {
-						// 다음페이지 이동 --> LEMP Window API(open)
-						LEMP.Window.open({
-							"_sPagePath" : "MAN/html/MAN0001.html"
-						});
-					} else {
-						// alert --> LEMP Window API(alert)
-						LEMP.Window.alert({
-							"_vMessage" : "아이디나 패스워드를 확인해주세요."
-						});
-					}
-				}
-			});
-		});
-	}
+	$.ajax({
+		type : "POST",
+		url : "/userLogin",
+		data : {
+			"user_id" : userId,
+			"user_pw" : userPwd
+		},
+		success : function(msg) {
+			window.location.href = "main";
+		},
+		error : function(xhr, status, error) {
+			alert("아이디 혹은 비밀번호가 잘못되었습니다.");
+		}
+	});
 }

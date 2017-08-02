@@ -25,7 +25,7 @@ public class ChromeAppApplication {
 		SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource);
 		
-		Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:mappers/*Mappers.xml");
+		Resource[] res = new PathMatchingResourcePatternResolver().getResources("classpath:mappers/*.xml");
 		sessionFactory.setMapperLocations(res);
 		
 		return sessionFactory.getObject();
