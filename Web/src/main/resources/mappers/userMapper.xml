@@ -49,6 +49,7 @@
 		select store_name, reg_date, message
 		from cafe_store s, cafe_inq i
 		where s.store_index = i.store_index
-		and i.user_id = #{user_id};
+		and i.user_id = #{user_id}
+		order by reg_date desc;
 	</select>
 </mapper>

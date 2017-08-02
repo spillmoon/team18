@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
@@ -225,11 +226,11 @@ public class MainController {
 	
 	
 	
-	@RequestMapping(value = "/dashboard", method = RequestMethod.POST)
+	@RequestMapping(value = "/dashboard/Temperature", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
 	public void dashboard(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
 		String content = paser(body);
-        System.out.println("Dashboard in : "+ content);
+        System.out.println("Dashboard in : "+ content); //cr : /S0sdsasdasdasdasdasdas,   sensor_nm, con -> 실시간 데잍.
         if(content.equals("4")){
         	System.out.println("contentInstance is Deleted");
         }else{
@@ -237,6 +238,44 @@ public class MainController {
     		this.template.convertAndSend("/topic/subscribe",entity);
         }
 	}
+	
+	//페이지  최초 로딩시 겟 요청을 통한 데이터 리프레쉬..
+	@RequestMapping(value="/getTemperature", method=RequestMethod.POST)
+	@ResponseStatus(value=HttpStatus.OK)
+	@ResponseBody
+	public String getTemperature() throws Exception {		
+		System.out.println("in getTemperature");
+		String device_id = "0004000100010002_12345671";
+		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010002_12345671/Temperature/la";
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
+		String temp = "no data";
+		try {
+			HttpGet httpGet = new HttpGet(url);
+			httpGet.setHeader("X-M2M-RI", "RQI0001"); // 
+			httpGet.setHeader("X-M2M-Origin", "/S"+device_id); //
+			httpGet.setHeader("Accept", "application/json");
+			CloseableHttpResponse res = httpclient.execute(httpGet);
+			
+			try {
+				if (res.getStatusLine().getStatusCode() == 200) {
+					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
+					System.out.println(res.getEntity().toString());
+				    System.out.println(EntityUtils.toString(entity));
+				    temp = paser(EntityUtils.toString(entity));
+				    System.out.println(temp);
+				}else {
+					System.out.println("sendMgmt eerr");
+				}
+			} finally {
+				res.close();
+			}
+		} finally {
+			httpclient.close();
+		}
+		return temp;
+	}
+	
 	
 	
 	@RequestMapping(value="/sendtoplug", method=RequestMethod.POST)
