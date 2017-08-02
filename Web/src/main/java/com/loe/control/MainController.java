@@ -70,6 +70,7 @@ public class MainController {
 		}
 	}
 	
+	
 	@RequestMapping(value = "/writeMessage", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
@@ -239,8 +240,16 @@ public class MainController {
         }
 	}
 	
+	private static String containerPaser(String body) throws Exception {
+		JSONParser jsonParser = new JSONParser();
+		JSONObject result = (JSONObject) jsonParser.parse(body);
+		JSONObject cin = (JSONObject) result.get("m2m:cin");
+		return (String) cin.get("con");
+	}
+	
+	
 	//페이지  최초 로딩시 겟 요청을 통한 데이터 리프레쉬..
-	@RequestMapping(value="/getTemperature", method=RequestMethod.POST)
+	@RequestMapping(value="/getTemperature", method=RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
 	@ResponseBody
 	public String getTemperature() throws Exception {		
@@ -251,6 +260,7 @@ public class MainController {
 		
 		String temp = "no data";
 		try {
+			System.out.println("start get data from iot platform");
 			HttpGet httpGet = new HttpGet(url);
 			httpGet.setHeader("X-M2M-RI", "RQI0001"); // 
 			httpGet.setHeader("X-M2M-Origin", "/S"+device_id); //
@@ -258,12 +268,15 @@ public class MainController {
 			CloseableHttpResponse res = httpclient.execute(httpGet);
 			
 			try {
+				System.out.println("receive from iot platform");
 				if (res.getStatusLine().getStatusCode() == 200) {
 					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
-					System.out.println(res.getEntity().toString());
-				    System.out.println(EntityUtils.toString(entity));
-				    temp = paser(EntityUtils.toString(entity));
-				    System.out.println(temp);
+				    temp = EntityUtils.toString(entity);
+				    String con = this.containerPaser(temp);
+//				    int c = temp.indexOf("con");
+//				    temp = temp.substring(c+6, c+10);
+//				    System.out.println(temp);
+				    temp = con;
 				}else {
 					System.out.println("sendMgmt eerr");
 				}
