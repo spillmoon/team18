@@ -270,6 +270,7 @@ public class MainController {
 	public void dashboard(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
 		String content = paser(body);
 		String sensor_nm = "Temperature";
+		content = content+"@"+sensor_nm;
 		System.out.println("Temperature in : " + content); // cr : /S0sdsasdasdasdasdasdas, // sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");

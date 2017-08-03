@@ -2,13 +2,45 @@ var firstFloorUrl;
 var secondFloorUrl;
 var firstFloorSound = "high";
 var secondFloorSound = "middle";
-var ClientTemperature = null;
-var ClientSound = null;
-var ClientDust = null;
-var ClientS1 = null;
-var ClientS2 = null;
-var ClientS3 = null;
-var ClientS4 = null;
+var stompClient = null;
+
+
+function connect() {
+	var socket = new SockJS("/dashboard");
+	
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/subscribe', function(message){
+        	console.log(message);
+        	console.log("body : " + JSON.parse(message.body));
+        	var serverBody = JSON.parse(message.body);
+        	var sensor_nm = serverBody.split('@')[1];
+        	var data = serverBody.split('@')[0];
+        	console.log(sensor_nm);
+        	console.log(data);
+        	if(sensor_nm =='Temperature'){
+        	    $('#temperature').emtpy();
+        	    $('#temperature').append(data);
+        	}
+        	// graph value
+           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
+            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
+//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
+//            showMessage(new Date());
+//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
+//        	var ct = JSON.parse(message.body).headers["content-type"];
+//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
+//        	showMessage("수신 본문의 content-type : " + ct);
+//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
+//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
+//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
+        });
+    }, function(error) {
+    	console.log(error);
+    	disconnect();
+    });	
+}
 
 $(document).ready(function(){
 	// 지점 정보 가져오기
@@ -169,157 +201,3 @@ $(document).ready(function(){
 	connect();
 });
 
-function connect() {
-    
-	var socket1 = new SockJS("/dashboard/Temperature");
-	var socket2 = new SockJS("/dashboard/Sound");
-//	var socket3 = new SockJS("/dashboard/Dust");
-	var socket4 = new SockJS("/dashboard/Pressure1");
-	var socket5 = new SockJS("/dashboard/Pressure2");
-	var socket6 = new SockJS("/dashboard/Pressure3");
-	var socket7 = new SockJS("/dashboard/Pressure4");
-	   
-	ClientTemperature = Stomp.over(socket1);
-	ClientTemperature.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        ClientTemperature.subscribe('/topic/subscribe', function(message){
-        	console.log(message);
-//        
-        	// graph value
-           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
-            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
-//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
-//            showMessage(new Date());
-//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
-//        	var ct = JSON.parse(message.body).headers["content-type"];
-//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
-//        	showMessage("수신 본문의 content-type : " + ct);
-//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
-//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
-//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
-        });
-    }, function(error) {
-    	console.log(error);
-    	disconnect();
-    });
-    
-	
-	ClientSound = Stomp.over(socket2);
-	ClientSound.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        ClientSound.subscribe('/topic/subscribe', function(message){
-        	console.log(message);
-//        
-        	// graph value
-           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
-            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
-//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
-//            showMessage(new Date());
-//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
-//        	var ct = JSON.parse(message.body).headers["content-type"];
-//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
-//        	showMessage("수신 본문의 content-type : " + ct);
-//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
-//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
-//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
-        });
-    }, function(error) {
-    	console.log(error);
-    	disconnect();
-    });
-	
-	ClientS1 = Stomp.over(socket2);
-	ClientS1.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        ClientS1.subscribe('/topic/subscribe', function(message){
-        	console.log(message);
-//        
-        	// graph value
-           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
-            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
-//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
-//            showMessage(new Date());
-//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
-//        	var ct = JSON.parse(message.body).headers["content-type"];
-//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
-//        	showMessage("수신 본문의 content-type : " + ct);
-//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
-//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
-//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
-        });
-    }, function(error) {
-    	console.log(error);
-    	disconnect();
-    });
-	ClientS2 = Stomp.over(socket2);
-	ClientS2.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        ClientS2.subscribe('/topic/subscribe', function(message){
-        	console.log(message);
-//        
-        	// graph value
-           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
-            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
-//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
-//            showMessage(new Date());
-//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
-//        	var ct = JSON.parse(message.body).headers["content-type"];
-//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
-//        	showMessage("수신 본문의 content-type : " + ct);
-//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
-//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
-//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
-        });
-    }, function(error) {
-    	console.log(error);
-    	disconnect();
-    });
-	ClientS3 = Stomp.over(socket2);
-	ClientS3.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        ClientS3.subscribe('/topic/subscribe', function(message){
-        	console.log(message);
-//        
-        	// graph value
-           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
-            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
-//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
-//            showMessage(new Date());
-//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
-//        	var ct = JSON.parse(message.body).headers["content-type"];
-//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
-//        	showMessage("수신 본문의 content-type : " + ct);
-//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
-//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
-//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
-        });
-    }, function(error) {
-    	console.log(error);
-    	disconnect();
-    });
-	ClientS4 = Stomp.over(socket2);
-	ClientS4.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        ClientS4.subscribe('/topic/subscribe', function(message){
-        	console.log(message);
-//        
-        	// graph value
-           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
-            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
-//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
-//            showMessage(new Date());
-//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
-//        	var ct = JSON.parse(message.body).headers["content-type"];
-//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
-//        	showMessage("수신 본문의 content-type : " + ct);
-//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
-//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
-//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
-        });
-    }, function(error) {
-    	console.log(error);
-    	disconnect();
-    });
-	
-	
-}
