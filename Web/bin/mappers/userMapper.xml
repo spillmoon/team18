@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loe.mapper.UserMapper">
+	<insert id="userJoin" parameterType="com.loe.model.UserInfoVO">
+		insert into cafe_user 
+			(
+				user_id, 
+				user_pw, 
+				user_email, 
+				user_name
+			) 
+		VALUES
+			(
+				#{user_id},	
+				#{user_pw}, 
+				#{user_email}, 
+				#{user_name}
+			)
+	</insert>
+	<select id="userLogin" parameterType="java.util.HashMap" resultType="com.loe.model.UserInfoVO">
+		select user_id, user_pw, user_email, user_name
+		from cafe_user
+		where user_id = #{user_id} and user_pw = #{user_pw}
+	</select>
+	<select id="getStoreList" parameterType="java.util.HashMap" resultType="com.loe.model.StoreInfoVO">
+		<![CDATA[
+			SELECT *
+			FROM cafe_store
+			WHERE (6371*acos(cos(radians(#{centerX}))*cos(radians(store_latitude))*cos(radians(store_longitude)
+					-radians(#{centerY}))+sin(radians(#{centerX}))*sin(radians(store_latitude)))) < 2
+			LIMIT 0,10;
+		]]>
+	</select>
+	<insert id="writeMessage" parameterType="java.util.HashMap">
+		insert into cafe_inq
+		(
+			store_index,
+			user_id,
+			message
+		)
+		values
+		(
+			#{store_index},
+			#{user_id},
+			#{message}
+		)
+	</insert>
+	<select id="messageList" parameterType="java.util.Map" resultType="com.loe.model.MessageInfoVO">
+		select store_name, reg_date, message
+		from cafe_store s, cafe_inq i
+		where s.store_index = i.store_index
+		and i.user_id = #{user_id}
+		order by reg_date desc;
+	</select>
+</mapper>

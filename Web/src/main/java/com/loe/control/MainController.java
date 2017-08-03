@@ -268,13 +268,9 @@ public class MainController {
 	@RequestMapping(value = "/dashboard/Temperature", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void dashboard(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
-		System.out.println("***************** TEMP ***********************\n " + body);
 		String content = paser(body);
 		String sensor_nm = "Temperature";
-		System.out.println("Temperature in : " + content); // cr :
-															// /S0sdsasdasdasdasdasdas,
-															// sensor_nm, con ->
-															// 실시간 데잍.
+		System.out.println("Temperature in : " + content); // cr : /S0sdsasdasdasdasdasdas, // sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
 		} else {
@@ -322,12 +318,9 @@ public class MainController {
 	@RequestMapping(value = "/dashboard/Sound", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void dashboardSound(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
-		System.out.println("***************** SOUND ***********************\n " + body);
 		String content = paser(body);
 		String sensor_nm = "Sound";
-		System.out.println("Sound in : " + content); // cr :
-													// //S0sdsasdasdasdasdasdas,
-													// sensor_nm, con -> 실시간 데잍.
+		System.out.println("Sound in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
 		} else {
@@ -378,9 +371,7 @@ public class MainController {
 		System.out.println("***************** DUST ***********************\n " + body);
 		String content = paser(body);
 		String sensor_nm = "Dust";
-		System.out.println("Dust in : " + content); // cr :
-													// //S0sdsasdasdasdasdasdas,
-													// sensor_nm, con -> 실시간 데잍.
+		System.out.println("Dust in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
 		} else {
@@ -427,12 +418,9 @@ public class MainController {
 	@RequestMapping(value = "/dashboard/Pressure1", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void dashboardPressure1(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
-		System.out.println("***************** PRESSURE ***********************\n " + body);
 		String content = paser(body);
 		String sensor_nm = "Pressure1";
-		System.out.println("Pressure1 in : " + content); // cr :
-													// //S0sdsasdasdasdasdasdas,
-													// sensor_nm, con -> 실시간 데잍.
+		System.out.println("Pressure1 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
 		} else {
@@ -446,7 +434,7 @@ public class MainController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public String getPressure2() throws Exception {
-		System.out.println("in getPressure1");
+		System.out.println("in getPressure2");
 		String device_id = "0004000100010004_12345671";
 		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010004_12345671/Pressure2/la";
 		CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -479,13 +467,10 @@ public class MainController {
 
 	@RequestMapping(value = "/dashboard/Pressure2", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void dashboardPressure2(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
-		System.out.println("***************** PRESSURE ***********************\n " + body);
+	public void dashboardPressure2(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
 		String content = paser(body);
 		String sensor_nm = "Pressure2";
-		System.out.println("Pressure2 in : " + content); // cr :
-													// //S0sdsasdasdasdasdasdas,
-													// sensor_nm, con -> 실시간 데잍.
+		System.out.println("Pressure2 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
 		} else {
@@ -494,12 +479,106 @@ public class MainController {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
+//	
+//	@RequestMapping(value = "/getPressure3", method = RequestMethod.GET)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	@ResponseBody
+//	public String getPressure3() throws Exception {
+//		System.out.println("in getPressure3");
+//		String device_id = "0004000100010003_12345671";
+//		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010003_12345671/Pressure/la";
+//		CloseableHttpClient httpclient = HttpClients.createDefault();
+//
+//		String temp = "no data";
+//		try {
+//			HttpGet httpGet = new HttpGet(url);
+//			httpGet.setHeader("X-M2M-RI", "RQI0001"); //
+//			httpGet.setHeader("X-M2M-Origin", "/S" + device_id); //
+//			httpGet.setHeader("Accept", "application/json");
+//			CloseableHttpResponse res = httpclient.execute(httpGet);
+//
+//			try {
+//				if (res.getStatusLine().getStatusCode() == 200) {
+//					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
+//					temp = EntityUtils.toString(entity);
+//					String con = containerPaser(temp);
+//					temp = con;
+//				} else {
+//					System.out.println("sendMgmt eerr");
+//				}
+//			} finally {
+//				res.close();
+//			}
+//		} finally {
+//			httpclient.close();
+//		}
+//		return temp;
+//	}
+//
+//	@RequestMapping(value = "/dashboard/Pressure3", method = RequestMethod.POST)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public void dashboardPressure3(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
+//		String content = paser(body);
+//		String sensor_nm = "Pressure"; // but Pressure3
+//		System.out.println("Pressure3 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
+//		if (content.equals("4")) {
+//			System.out.println("contentInstance is Deleted");
+//		} else {
+//			HttpEntity<String> entity = new HttpEntity<String>(content, headers);
+//			this.template.convertAndSend("/topic/subscribe", entity);
+//		}
+//	}
+//	
+//	
+//	@RequestMapping(value = "/getPressure4", method = RequestMethod.GET)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	@ResponseBody
+//	public String getPressure4() throws Exception {
+//		System.out.println("in getPressure4");
+//		String device_id = "0004000100010003_12345671";
+//		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010003_12345671/Sound/la";
+//		CloseableHttpClient httpclient = HttpClients.createDefault();
+//
+//		String temp = "no data";
+//		try {
+//			HttpGet httpGet = new HttpGet(url);
+//			httpGet.setHeader("X-M2M-RI", "RQI0001"); //
+//			httpGet.setHeader("X-M2M-Origin", "/S" + device_id); //
+//			httpGet.setHeader("Accept", "application/json");
+//			CloseableHttpResponse res = httpclient.execute(httpGet);
+//
+//			try {
+//				if (res.getStatusLine().getStatusCode() == 200) {
+//					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
+//					temp = EntityUtils.toString(entity);
+//					String con = containerPaser(temp);
+//					temp = con;
+//				} else {
+//					System.out.println("sendMgmt eerr");
+//				}
+//			} finally {
+//				res.close();
+//			}
+//		} finally {
+//			httpclient.close();
+//		}
+//		return temp;
+//	}
+//
+//	@RequestMapping(value = "/dashboard/Pressure4", method = RequestMethod.POST)
+//	@ResponseStatus(value = HttpStatus.OK)
+//	public void dashboardPressure4(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
+//		String content = paser(body);
+//		String sensor_nm = "Sound"; //but Pressure4
+//		System.out.println("Pressure4 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
+//		if (content.equals("4")) {
+//			System.out.println("contentInstance is Deleted");
+//		} else {
+//			HttpEntity<String> entity = new HttpEntity<String>(content, headers);
+//			this.template.convertAndSend("/topic/subscribe", entity);
+//		}
+//	}
+//	
 	
 	
 	

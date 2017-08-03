@@ -5,6 +5,10 @@ var secondFloorSound = "middle";
 var ClientTemperature = null;
 var ClientSound = null;
 var ClientDust = null;
+var ClientS1 = null;
+var ClientS2 = null;
+var ClientS3 = null;
+var ClientS4 = null;
 
 $(document).ready(function(){
 	// 지점 정보 가져오기
@@ -34,68 +38,57 @@ $(document).ready(function(){
 		error : function(xhr, status, error) {
 		}
 	});
-	
+	$.ajax({
+		type : "GET",
+		url : "/getSound",
+		success : function(msg) {
+			console.log("sound " + msg);
+		},
+		error : function(xhr, status, error) {
+		}
+	});
 	// 초기 압력 값 가져오기
-//	$.ajax({
-//		type : "GET",
-//		url : "/getSeat1",
-//		success : function(msg) {
-//			console.log(msg);
-//		},
-//		error : function(xhr, status, error) {
-//		}
-//	});
-//	$.ajax({
-//		type : "GET",
-//		url : "/getSeat2",
-//		success : function(msg) {
-//			console.log(msg);
-//		},
-//		error : function(xhr, status, error) {
-//		}
-//	});
-//	$.ajax({
-//		type : "GET",
-//		url : "/getSeat3",
-//		success : function(msg) {
-//			console.log(msg);
-//		},
-//		error : function(xhr, status, error) {
-//		}
-//	});
-//	$.ajax({
-//		type : "GET",
-//		url : "/getSeat4",
-//		success : function(msg) {
-//			console.log(msg);
-//		},
-//		error : function(xhr, status, error) {
-//		}
-//	});
-//	$.ajax({
-//		type : "GET",
-//		url : "/getSeat5",
-//		success : function(msg) {
-//			console.log(msg);
-//		},
-//		error : function(xhr, status, error) {
-//		}
-//	});
-//	$.ajax({
-//		type : "GET",
-//		url : "/getSeat6",
-//		success : function(msg) {
-//			console.log(msg);
-//		},
-//		error : function(xhr, status, error) {
-//		}
-//	});
+	$.ajax({
+		type : "GET",
+		url : "/getPressure1",
+		success : function(msg) {
+			console.log("s1 " + msg);
+		},
+		error : function(xhr, status, error) {
+		}
+	});
+	$.ajax({
+		type : "GET",
+		url : "/getPressure2",
+		success : function(msg) {
+			console.log("s2 " + msg);
+		},
+		error : function(xhr, status, error) {
+		}
+	});
+	$.ajax({
+		type : "GET",
+		url : "/getPressure3",
+		success : function(msg) {
+			console.log("s3 " + msg);
+		},
+		error : function(xhr, status, error) {
+		}
+	});
+	$.ajax({
+		type : "GET",
+		url : "/getPressure4",
+		success : function(msg) {
+			console.log("s4 " + msg);
+		},
+		error : function(xhr, status, error) {
+		}
+	});
+
 	
 	$("#inquery").click(function(){
 		window.location.href = "inquery2";
 	});
-	
-	connect();
 	
 	function storeMark(store_data){
 		$(".store_name").text(store_data.store_name);
@@ -173,19 +166,24 @@ $(document).ready(function(){
 		$("#seat11").css("display", 'inherit');
 		$("#seat12").css("display", 'inherit');
 	});
+	connect();
 });
 
 function connect() {
     
 	var socket1 = new SockJS("/dashboard/Temperature");
 	var socket2 = new SockJS("/dashboard/Sound");
-	var socket3 = new SockJS("/dashboard/Dust");
+//	var socket3 = new SockJS("/dashboard/Dust");
+	var socket4 = new SockJS("/dashboard/Pressure1");
+	var socket5 = new SockJS("/dashboard/Pressure2");
+	var socket6 = new SockJS("/dashboard/Pressure3");
+	var socket7 = new SockJS("/dashboard/Pressure4");
 	   
 	ClientTemperature = Stomp.over(socket1);
 	ClientTemperature.connect({}, function(frame) {
         console.log('Connected: ' + frame);
         ClientTemperature.subscribe('/topic/subscribe', function(message){
-        	alert(message);
+        	console.log(message);
 //        
         	// graph value
            // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
@@ -210,7 +208,7 @@ function connect() {
 	ClientSound.connect({}, function(frame) {
         console.log('Connected: ' + frame);
         ClientSound.subscribe('/topic/subscribe', function(message){
-        	alert(message);
+        	console.log(message);
 //        
         	// graph value
            // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
@@ -230,12 +228,11 @@ function connect() {
     	disconnect();
     });
 	
-	
-	ClientDust = Stomp.over(socket3);
-	ClientDust.connect({}, function(frame) {
+	ClientS1 = Stomp.over(socket2);
+	ClientS1.connect({}, function(frame) {
         console.log('Connected: ' + frame);
-        ClientDust.subscribe('/topic/subscribe', function(message){
-        	alert(message);
+        ClientS1.subscribe('/topic/subscribe', function(message){
+        	console.log(message);
 //        
         	// graph value
            // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
@@ -254,4 +251,75 @@ function connect() {
     	console.log(error);
     	disconnect();
     });
+	ClientS2 = Stomp.over(socket2);
+	ClientS2.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+        ClientS2.subscribe('/topic/subscribe', function(message){
+        	console.log(message);
+//        
+        	// graph value
+           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
+            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
+//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
+//            showMessage(new Date());
+//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
+//        	var ct = JSON.parse(message.body).headers["content-type"];
+//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
+//        	showMessage("수신 본문의 content-type : " + ct);
+//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
+//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
+//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
+        });
+    }, function(error) {
+    	console.log(error);
+    	disconnect();
+    });
+	ClientS3 = Stomp.over(socket2);
+	ClientS3.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+        ClientS3.subscribe('/topic/subscribe', function(message){
+        	console.log(message);
+//        
+        	// graph value
+           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
+            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
+//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
+//            showMessage(new Date());
+//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
+//        	var ct = JSON.parse(message.body).headers["content-type"];
+//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
+//        	showMessage("수신 본문의 content-type : " + ct);
+//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
+//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
+//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
+        });
+    }, function(error) {
+    	console.log(error);
+    	disconnect();
+    });
+	ClientS4 = Stomp.over(socket2);
+	ClientS4.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+        ClientS4.subscribe('/topic/subscribe', function(message){
+        	console.log(message);
+//        
+        	// graph value
+           // temperature_value = JSON.parse(JSON.parse(message.body).body).temperature;         
+            //humidity_value = JSON.parse(JSON.parse(message.body).body).humidity;
+//        	temperature_value = JSON.parse(JSON.parse(message.body).body);
+//            showMessage(new Date());
+//        	//showMessage("수신 content-type : " + message.headers["content-type"]);
+//        	var ct = JSON.parse(message.body).headers["content-type"];
+//        	ct ? "" : ct = JSON.parse(message.body).headers["Content-Type"];
+//        	showMessage("수신 본문의 content-type : " + ct);
+//        	var ot = JSON.parse(message.body).headers["x-m2m-ot"];
+//        	ot ? showMessage("수신 본문의 x-m2m-ot : " + ot) : "";
+//        	showMessage("수신 본문 내용  : " + JSON.parse(message.body).body);
+        });
+    }, function(error) {
+    	console.log(error);
+    	disconnect();
+    });
+	
+	
 }
