@@ -270,7 +270,7 @@ public class MainController {
 	public void dashboard(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
 		String content = paser(body);
 		String sensor_nm = "Temperature";
-		content = content+"@"+sensor_nm;
+		content = sensor_nm+"@"+content;
 		System.out.println("Temperature in : " + content); // cr : /S0sdsasdasdasdasdasdas, // sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
@@ -321,6 +321,7 @@ public class MainController {
 	public void dashboardSound(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
 		String content = paser(body);
 		String sensor_nm = "Sound";
+		content = sensor_nm + "@" + content;
 		System.out.println("Sound in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
@@ -421,6 +422,7 @@ public class MainController {
 	public void dashboardPressure1(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {
 		String content = paser(body);
 		String sensor_nm = "Pressure1";
+		content = sensor_nm +"@"+content;
 		System.out.println("Pressure1 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
@@ -471,6 +473,7 @@ public class MainController {
 	public void dashboardPressure2(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
 		String content = paser(body);
 		String sensor_nm = "Pressure2";
+		content = sensor_nm+"@"+content;
 		System.out.println("Pressure2 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
 		if (content.equals("4")) {
 			System.out.println("contentInstance is Deleted");
@@ -480,106 +483,108 @@ public class MainController {
 		}
 	}
 	
-//	
-//	@RequestMapping(value = "/getPressure3", method = RequestMethod.GET)
-//	@ResponseStatus(value = HttpStatus.OK)
-//	@ResponseBody
-//	public String getPressure3() throws Exception {
-//		System.out.println("in getPressure3");
-//		String device_id = "0004000100010003_12345671";
-//		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010003_12345671/Pressure/la";
-//		CloseableHttpClient httpclient = HttpClients.createDefault();
-//
-//		String temp = "no data";
-//		try {
-//			HttpGet httpGet = new HttpGet(url);
-//			httpGet.setHeader("X-M2M-RI", "RQI0001"); //
-//			httpGet.setHeader("X-M2M-Origin", "/S" + device_id); //
-//			httpGet.setHeader("Accept", "application/json");
-//			CloseableHttpResponse res = httpclient.execute(httpGet);
-//
-//			try {
-//				if (res.getStatusLine().getStatusCode() == 200) {
-//					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
-//					temp = EntityUtils.toString(entity);
-//					String con = containerPaser(temp);
-//					temp = con;
-//				} else {
-//					System.out.println("sendMgmt eerr");
-//				}
-//			} finally {
-//				res.close();
-//			}
-//		} finally {
-//			httpclient.close();
-//		}
-//		return temp;
-//	}
-//
-//	@RequestMapping(value = "/dashboard/Pressure3", method = RequestMethod.POST)
-//	@ResponseStatus(value = HttpStatus.OK)
-//	public void dashboardPressure3(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
-//		String content = paser(body);
-//		String sensor_nm = "Pressure"; // but Pressure3
-//		System.out.println("Pressure3 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
-//		if (content.equals("4")) {
-//			System.out.println("contentInstance is Deleted");
-//		} else {
-//			HttpEntity<String> entity = new HttpEntity<String>(content, headers);
-//			this.template.convertAndSend("/topic/subscribe", entity);
-//		}
-//	}
-//	
-//	
-//	@RequestMapping(value = "/getPressure4", method = RequestMethod.GET)
-//	@ResponseStatus(value = HttpStatus.OK)
-//	@ResponseBody
-//	public String getPressure4() throws Exception {
-//		System.out.println("in getPressure4");
-//		String device_id = "0004000100010003_12345671";
-//		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010003_12345671/Sound/la";
-//		CloseableHttpClient httpclient = HttpClients.createDefault();
-//
-//		String temp = "no data";
-//		try {
-//			HttpGet httpGet = new HttpGet(url);
-//			httpGet.setHeader("X-M2M-RI", "RQI0001"); //
-//			httpGet.setHeader("X-M2M-Origin", "/S" + device_id); //
-//			httpGet.setHeader("Accept", "application/json");
-//			CloseableHttpResponse res = httpclient.execute(httpGet);
-//
-//			try {
-//				if (res.getStatusLine().getStatusCode() == 200) {
-//					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
-//					temp = EntityUtils.toString(entity);
-//					String con = containerPaser(temp);
-//					temp = con;
-//				} else {
-//					System.out.println("sendMgmt eerr");
-//				}
-//			} finally {
-//				res.close();
-//			}
-//		} finally {
-//			httpclient.close();
-//		}
-//		return temp;
-//	}
-//
-//	@RequestMapping(value = "/dashboard/Pressure4", method = RequestMethod.POST)
-//	@ResponseStatus(value = HttpStatus.OK)
-//	public void dashboardPressure4(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
-//		String content = paser(body);
-//		String sensor_nm = "Sound"; //but Pressure4
-//		System.out.println("Pressure4 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
-//		if (content.equals("4")) {
-//			System.out.println("contentInstance is Deleted");
-//		} else {
-//			HttpEntity<String> entity = new HttpEntity<String>(content, headers);
-//			this.template.convertAndSend("/topic/subscribe", entity);
-//		}
-//	}
-//	
+	
+	@RequestMapping(value = "/getPressure3", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public String getPressure3() throws Exception {
+		System.out.println("in getPressure3");
+		String device_id = "0004000100010003_12345671";
+		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010003_12345671/Pressure/la";
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+
+		String temp = "no data";
+		try {
+			HttpGet httpGet = new HttpGet(url);
+			httpGet.setHeader("X-M2M-RI", "RQI0001"); //
+			httpGet.setHeader("X-M2M-Origin", "/S" + device_id); //
+			httpGet.setHeader("Accept", "application/json");
+			CloseableHttpResponse res = httpclient.execute(httpGet);
+
+			try {
+				if (res.getStatusLine().getStatusCode() == 200) {
+					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
+					temp = EntityUtils.toString(entity);
+					String con = containerPaser(temp);
+					temp = con;
+				} else {
+					System.out.println("sendMgmt eerr");
+				}
+			} finally {
+				res.close();
+			}
+		} finally {
+			httpclient.close();
+		}
+		return temp;
+	}
+
+	@RequestMapping(value = "/dashboard/Pressure3", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void dashboardPressure3(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
+		String content = paser(body);
+		String sensor_nm = "Pressure"; // but Pressure3
+		content = sensor_nm+"@"+content;
+		System.out.println("Pressure3 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
+		if (content.equals("4")) {
+			System.out.println("contentInstance is Deleted");
+		} else {
+			HttpEntity<String> entity = new HttpEntity<String>(content, headers);
+			this.template.convertAndSend("/topic/subscribe", entity);
+		}
+	}
+	
+	
+	@RequestMapping(value = "/getPressure4", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public String getPressure4() throws Exception {
+		System.out.println("in getPressure4");
+		String device_id = "0004000100010003_12345671";
+		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010003_12345671/Sound/la";
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+
+		String temp = "no data";
+		try {
+			HttpGet httpGet = new HttpGet(url);
+			httpGet.setHeader("X-M2M-RI", "RQI0001"); //
+			httpGet.setHeader("X-M2M-Origin", "/S" + device_id); //
+			httpGet.setHeader("Accept", "application/json");
+			CloseableHttpResponse res = httpclient.execute(httpGet);
+
+			try {
+				if (res.getStatusLine().getStatusCode() == 200) {
+					org.apache.http.HttpEntity entity = (org.apache.http.HttpEntity) res.getEntity();
+					temp = EntityUtils.toString(entity);
+					String con = containerPaser(temp);
+					temp = con;
+				} else {
+					System.out.println("sendMgmt eerr");
+				}
+			} finally {
+				res.close();
+			}
+		} finally {
+			httpclient.close();
+		}
+		return temp;
+	}
+
+	@RequestMapping(value = "/dashboard/Pressure4", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void dashboardPressure4(@RequestBody String body, @RequestHeader HttpHeaders headers) throws Exception {	
+		String content = paser(body);
+		String sensor_nm = "Sound"; //but Pressure4
+		content = sensor_nm+"@"+content;
+		System.out.println("Pressure4 in : " + content); // cr : /S0sdsasdasdasdasdasdas, sensor_nm, con -> 실시간 데잍.
+		if (content.equals("4")) {
+			System.out.println("contentInstance is Deleted");
+		} else {
+			HttpEntity<String> entity = new HttpEntity<String>(content, headers);
+			this.template.convertAndSend("/topic/subscribe", entity);
+		}
+	}
+	
 	
 	
 	

@@ -219,7 +219,6 @@ body {
 	float: left;
 	width: 85%;
 	height: 360px;
-	background-image: url("/images/background_high.png");
 	background-size: 300px 360px;
 	background-repeat: no-repeat;
 }
@@ -241,7 +240,7 @@ body {
 #seat2 {
 	top: 360px;
 	left: 77px;
-	background-image: url("/images/paired_chair_o.png");
+	background-image: url("/images/paired_chair_x.png");
 }
 
 #seat3, #seat4, #seat5, #seat6 {
@@ -255,19 +254,17 @@ body {
 #seat3 {
 	top: 290px;
 	left: 155px;
-	background-image: url("/images/squared_chair_x.png");
 }
 
 #seat4 {
 	top: 380px;
 	left: 155px;
-	background-image: url("/images/squared_chair_x.png");
 }
 
 #seat5 {
 	top: 290px;
 	left: 230px;
-	background-image: url("/images/squared_chair_o.png");
+	background-image: url("/images/squared_chair_x.png");
 }
 
 #seat6 {
