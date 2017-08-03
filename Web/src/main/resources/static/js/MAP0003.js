@@ -16,21 +16,15 @@ function connect() {
 	stompClient.connect({}, function(frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/subscribe', function(message){
-        	console.log(message);
-        	var serverBody = message.body;
-        	console.log(serverBody);
+        	var jsonObject = JSON.parse(message.body);
+        	var splitData = jsonObject.body.split("@");
         	
-        	var senserData = serverBody.body;
-        	console.log(senserData);
+        	var sensor_nm = splitData[0];
+        	var data = splitData[1];
         	
-        	var aaaa = serverBody.get("body");
-        	console.log(aaaa);
-        	
-        	
-        	var sensor_nm = serverBody.split("@")[0];
-        	var data = serverBody.split("@")[1];
         	console.log(sensor_nm);
         	console.log(data);
+        	
         	if(sensor_nm =='Temperature'){
         	    $('#temperature').emtpy();
         	    $('#temperature').append(data);

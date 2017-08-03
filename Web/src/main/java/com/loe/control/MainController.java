@@ -234,8 +234,8 @@ public class MainController {
 	@ResponseBody
 	public String getTemperature() throws Exception {
 		System.out.println("in getTemperature");
-		String device_id = "S0004000100010004_12345671";
-		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010004_12345671/Temperature/la";
+		String device_id = "S0004000100010002_12345671";
+		String url = "http://server.norimsu.pe.kr:8080/~/charlot/base/S0004000100010002_12345671/Temperature/la";
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 
 		String temp = "no data";
